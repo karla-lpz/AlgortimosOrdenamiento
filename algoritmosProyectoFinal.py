@@ -5,22 +5,24 @@ import os
 
 
 def bubbleSort(unsort_list):
-    print("             " + str(unsort_list))
+    arrayCopy = unsort_list.copy()
+    print("             " + str(arrayCopy))
     iteracion = 0
     intercambios = 0
     comparaciones = 0
 
-    for i in range(len(unsort_list) - 1):
-        for j in range(len(unsort_list) - 1 - i):
+    for i in range(len(arrayCopy) - 1):
+        for j in range(len(arrayCopy) - 1 - i):
             comparaciones += 1
-            if unsort_list[j] > unsort_list[j + 1]:
-                unsort_list[j], unsort_list[j + 1] = unsort_list[j + 1], unsort_list[j]
+            if arrayCopy[j] > arrayCopy[j + 1]:
+                arrayCopy[j], arrayCopy[j + 1] = arrayCopy[j + 1], arrayCopy[j]
                 intercambios += 1
             iteracion += 1
-            print("Iteración " + str(iteracion) + ": " + str(unsort_list))
+            print("Iteración " + str(iteracion) + ": " + str(arrayCopy))
 
     print(comparaciones)
     print(intercambios)
+    analizeBubbleSort(arrayCopy, comparaciones, intercambios)
     return intercambios, comparaciones
 
 
@@ -197,7 +199,7 @@ def menu():
         option = input("Elige una opción: ")
     return option
 
-def printBubble(numeros):
+def analizeBubbleSort(numeros, comparations, shifts):
     nBubble = len(numeros)
     print(("-" * 75))
     print((" " * 12) + "|" + (" " * 5) +"COMPARACIONES" + (" " * 8) + ("|") + (" " * 6) + "INTERCAMBIOS" + (" " * 9))
@@ -205,7 +207,7 @@ def printBubble(numeros):
     print("Complejidad |" + "   ((n - 1)n) / 2 = " + str((nBubble - 1) * nBubble / 2) + "  |" + (" " * 3) + "de 0 a ((n - 1)n) / 2 = [0," +
           str((nBubble - 1) * nBubble / 2) + "]")
     print(("-" * 75))
-    print("Realizadas  |" + (" " * 26) + "|")
+    print("Realizadas  |" + (" " * 26) + str(comparations) + "|"  + str(shifts) )
     print(("-" * 75) + '\n')
 
 def userInput():
@@ -218,10 +220,10 @@ def userInput():
             numeros.append(int(strInput[i]))
     print((":" * 7) + " BUBBLESORT " + (":" * 6))
     bubbleSort(numeros)
-    printBubble(numeros)
-    # print((":" * 7) + " HEAPSORT " + (":" * 7))
-    # print("             " + str(numeros))
-    # heapSort(numeros)
+
+    print((":" * 7) + " HEAPSORT " + (":" * 7))
+    print("             " + str(numeros))
+    heapSort(numeros)
     # print((":" * 7) + " MERGESORT " + (":" * 7))
     # print("             " + str(numeros))
     # mergeSort(numeros)
