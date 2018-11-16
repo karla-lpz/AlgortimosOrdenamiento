@@ -152,20 +152,25 @@ def partition(array, start, end):
 def selectionSort(unsort_list, debbug):
     array_copy = unsort_list.copy()
     print("             " + str(array_copy))
+    lenght = len(array_copy)
     iteration = 0
     shifts = 0
     comparations = 0
 
-    for i in range(len(array_copy) - 1):
-        for j in reversed(range(i)):
-            is_bigger = array_copy[i + 1] < array_copy[j]
+    for i in range(0, lenght):
+        smallest = i
+        for j in range(i + 1, lenght):
             comparations += 1
-            if is_bigger:
-                array_copy[i + 1], array_copy[j] = array_copy[j], array_copy[i + 1]
-                shifts += 1
-            iteration += 1
-            print("Iteración " + str(iteration) + ": " + str(array_copy))
-    print(str(iteration))
+            if array_copy[j] < array_copy[smallest]:
+                smallest = j
+        if min is not i:
+            temp = array_copy[i]
+            array_copy[i] = array_copy[smallest]
+            array_copy[smallest] = temp
+            shifts += 1
+        iteration += 1
+        print("Iteración " + str(iteration) + ": " + str(array_copy))
+
     print(str(comparations))
     print(str(shifts))
     analizeSelectionSort(unsort_list, comparations, shifts)
@@ -264,8 +269,8 @@ def userInput():
     # print((":" * 7) + " QUICKSORT " + (":" * 7))
     # quickSort(numbers, 0, len(numbers) - 1)
 
-    # print((":" * 5) + " SELECTIONSORT " + (":" * 5))
-    # selectionSort(numbers, True)
+    print((":" * 5) + " SELECTIONSORT " + (":" * 5))
+    selectionSort(numbers, True)
 
     # print((":" * 7) + " INSERTIONSORT " + (":" * 7))
     # insertionSort(numbers)
@@ -284,7 +289,8 @@ def main():
         userInput()
     elif option == "b":
         genInput()
-
+    # a = [5,7,2,3,9,1]
+    # print(selectionSort(a, False))
 main()
 
 
