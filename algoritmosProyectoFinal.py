@@ -7,23 +7,21 @@ import os
 def bubbleSort(unsort_list):
     arrayCopy = unsort_list.copy()
     print("             " + str(arrayCopy))
-    iteracion = 0
-    intercambios = 0
-    comparaciones = 0
+    iteration = 0
+    shifts = 0
+    comparations = 0
 
     for i in range(len(arrayCopy) - 1):
         for j in range(len(arrayCopy) - 1 - i):
-            comparaciones += 1
+            comparations += 1
             if arrayCopy[j] > arrayCopy[j + 1]:
                 arrayCopy[j], arrayCopy[j + 1] = arrayCopy[j + 1], arrayCopy[j]
-                intercambios += 1
-            iteracion += 1
-            print("Iteración " + str(iteracion) + ": " + str(arrayCopy))
+                shifts += 1
+            iteration += 1
+            print("Iteración " + str(iteration) + ": " + str(arrayCopy))
 
-    print(comparaciones)
-    print(intercambios)
-    analizeBubbleSort(arrayCopy, comparaciones, intercambios)
-    return intercambios, comparaciones
+    analizeBubbleSort(arrayCopy, comparations, shifts)
+    return shifts, comparations
 
 
 def heapify(arr, n, i):
@@ -71,7 +69,7 @@ def swap(A, x, y):
 
 
 def mergeSort(array):
-    iteracion = 1
+    iteration = 1
     # Punto medio del arreglo
     mitad = len(array) // 2
 
@@ -101,8 +99,8 @@ def mergeSort(array):
         else:
             res.append(rgt.pop())
 
-        print("Iteración " + str(iteracion) + ": " + str(array))
-        iteracion += 1
+        print("Iteración " + str(iteration) + ": " + str(array))
+        iteration += 1
     # Estado del arreglo de apoyo = [MAX,...,MIN]
     # Ordenar el arreglo en reversa
     res.reverse()
@@ -151,44 +149,52 @@ def partition(array, start, end):
     array[right] = temp
     return right
 
-def selectionSort(unorderArray, debbug):
-    print("             " + str(unorderArray))
-    iteracion = 1
-    for i in range(len(unorderArray)):
-        minInd = i
-        for j in range(i + 1, len(unorderArray)):
-            if debbug:
-                print("Iteración "+ str(iteracion) + ": " + str(unorderArray))
-                iteracion += 1
-            if unorderArray[minInd] > unorderArray[j]:
+def selectionSort(unsort_list, debbug):
+    array_copy = unsort_list.copy()
+    print("             " + str(array_copy))
+    iteration = 0
+    shifts = 0
+    comparations = 0
 
-                minInd = j
-        unorderArray[i], unorderArray[minInd] = unorderArray[minInd], unorderArray[i]
-
-    return unorderArray
+    for i in range(len(array_copy) - 1):
+        for j in reversed(range(i)):
+            is_bigger = array_copy[i + 1] < array_copy[j]
+            comparations += 1
+            if is_bigger:
+                array_copy[i + 1], array_copy[j] = array_copy[j], array_copy[i + 1]
+                shifts += 1
+            iteration += 1
+            print("Iteración " + str(iteration) + ": " + str(array_copy))
+    print(str(iteration))
+    print(str(comparations))
+    print(str(shifts))
+    analizeSelectionSort(unsort_list, comparations, shifts)
+    return array_copy
 
 def insertionSort(unorderedArray):
-    print("             " + str(unorderedArray))
-    iteracion = 1
-    comparacion = 0
-    intercambios = 1
+    arrayCopy = unorderedArray.copy()
+    print("             " + str(arrayCopy))
+    iteration = 1
+    comparition = 0
+    shifts = 0
 
-    #initialTime = time.time()
-    for i in range(0, len(unorderedArray)):
-        for j in range(i + 1, len(unorderedArray)):
-            print("Iteración " + str(iteracion) + ": " + str(unorderedArray))
-            iteracion += 1
-            if unorderedArray[j] < unorderedArray[i]:
-                comparacion += 1
-                unorderedArray[j], unorderedArray[i] = unorderedArray[i], unorderedArray[j]
-                intercambios += 1
+    for i in range(1, len(arrayCopy)):
+        small = arrayCopy[i]
+        for j in reversed(range(-1, i)):
+            comparition += 1
+            if j >= 0 and small < arrayCopy[j]:
+                arrayCopy[j + 1], arrayCopy[j] = arrayCopy[j], arrayCopy[j + 1]
+                shifts += 1
+            else:
+                break
+            print("Iteración " + str(iteration) + ": " + str(unorderedArray))
+            iteration += 1
+        arrayCopy[j + 1] = small
 
-    #finalTime = timetime()
-    #totalTime = finalTime - initialTime
-    # print(initialTime)
-    # print(finalTime)
-    # print(totalTime)
-    return unorderedArray
+    print(comparition)
+    print(shifts)
+    analizeInsertionSort(unorderedArray,comparition,shifts)
+    return arrayCopy
 
 def menu():
     print((":" * 7) + " ORDENAMIENTOS " + (":" * 7))
@@ -199,40 +205,70 @@ def menu():
         option = input("Elige una opción: ")
     return option
 
-def analizeBubbleSort(numeros, comparations, shifts):
-    nBubble = len(numeros)
+def analizeBubbleSort(numbers, comparations, shifts):
+    nBubble = len(numbers)
     print(("-" * 75))
-    print((" " * 12) + "|" + (" " * 5) +"COMPARACIONES" + (" " * 8) + ("|") + (" " * 6) + "INTERCAMBIOS" + (" " * 9))
+    print(('\t' * 3) + "|" + (" " * 5) +"COMPARACIONES" + (" " * 8) + ("|") + (" " * 6) + "INTERCAMBIOS" + (" " * 9))
+    print(("-" * 75))
     print("Notación O  |" + (" " * 8) + "n^2 = " + str(nBubble ** 2) + (" " * 10) + "|" + (" " * 8) + "n^2 = ")
     print("Complejidad |" + "   ((n - 1)n) / 2 = " + str((nBubble - 1) * nBubble / 2) + "  |" + (" " * 3) + "de 0 a ((n - 1)n) / 2 = [0," +
           str((nBubble - 1) * nBubble / 2) + "]")
     print(("-" * 75))
-    print("Realizadas  |" + (" " * 26) + str(comparations) + "|"  + str(shifts) )
+    print("Realizadas  |" + (" " * 10) + str(comparations) + "|"  + ('\t' * 3) + str(shifts) )
+    print(("-" * 75) + '\n')
+
+def analizeInsertionSort(numbers, comparations, shifts):
+    nInsertion = len(numbers)
+    print(("-" * 75))
+    print(('\t' * 3) + "|" + (" " * 5) + "COMPARACIONES" + (" " * 8) + ("|") + (" " * 6) + "INTERCAMBIOS" + (" " * 9))
+    print(("-" * 75))
+    print("Notación O  |" + (" " * 8) + "n^2 = " + str(nInsertion ** 2) + (" " * 10) + "|" + (" " * 8) + "n^2 = ")
+    print("Complejidad |" + "   ((n - 1)n) / 2 = " + str((nInsertion - 1) * nInsertion / 2) + "  |" + (
+                " " * 3) + "de 0 a ((n - 1)n) / 2 = [0," +
+          str((nInsertion - 1) * nInsertion / 2) + "]")
+    print(("-" * 75))
+    print("Realizadas  |" + (" " * 10) + str(comparations) + "|" + ('\t' * 3) + str(shifts))
+    print(("-" * 75) + '\n')
+
+def analizeSelectionSort(numbers, comparations, shifts):
+    nSelection = len(numbers)
+    print(('\t' * 3) + "|" + (" " * 5) + "COMPARACIONES" + (" " * 8) + ("|") + (" " * 6) + "INTERCAMBIOS" + (" " * 9))
+    print("Notación O  |" + (" " * 8) + "n^2 = " + str(nSelection ** 2) + (" " * 10) + "|" + (" " * 8) + "n^2 = ")
+    print("Complejidad |" + "   ((n - 1)n) / 2 = " + str((nSelection - 1) * nSelection / 2) + "  |" + (
+            " " * 3) + "de 0 a ((n - 1)n) / 2 = [0," +
+          str((nSelection - 1) * nSelection / 2) + "]")
+    print(("-" * 75))
+    print("Realizadas  |" + (" " * 10) + str(comparations) + "|" + ('\t' * 3) + str(shifts))
     print(("-" * 75) + '\n')
 
 def userInput():
-    numDatos = input("¿Cuántos datos?: ")
-    numeros = []
+    dataLength = input("¿Cuántos datos?: ")
+    numbers = []
 
-    if int(numDatos) > 0:
-        strInput = input("Da los " + numDatos + " datos separados por un espacio: ").split(" ")
-        for i in range(int(numDatos)):
-            numeros.append(int(strInput[i]))
-    print((":" * 7) + " BUBBLESORT " + (":" * 6))
-    bubbleSort(numeros)
+    if int(dataLength) > 0:
+        strInput = input("Da los " + dataLength + " datos separados por un espacio: ").split(" ")
+        for i in range(int(dataLength)):
+            numbers.append(int(strInput[i]))
 
-    print((":" * 7) + " HEAPSORT " + (":" * 7))
-    print("             " + str(numeros))
-    heapSort(numeros)
+    # print((":" * 7) + " BUBBLESORT " + (":" * 6))
+    # bubbleSort(numbers)
+
+    # print((":" * 7) + " HEAPSORT " + (":" * 7))
+    # print("             " + str(numbers))
+    # heapSort(numbers)
+
     # print((":" * 7) + " MERGESORT " + (":" * 7))
-    # print("             " + str(numeros))
-    # mergeSort(numeros)
+    # print("             " + str(numbers))
+    # mergeSort(numbers)
+
     # print((":" * 7) + " QUICKSORT " + (":" * 7))
-    # quickSort(numeros, 0, len(numeros) - 1)
+    # quickSort(numbers, 0, len(numbers) - 1)
+
     # print((":" * 5) + " SELECTIONSORT " + (":" * 5))
-    # selectionSort(numeros, True)
+    # selectionSort(numbers, True)
+
     # print((":" * 7) + " INSERTIONSORT " + (":" * 7))
-    # insertionSort(numeros)
+    # insertionSort(numbers)
 
 def genInput():
     rango = input("Introduce el rango: ")
@@ -248,8 +284,7 @@ def main():
         userInput()
     elif option == "b":
         genInput()
-    # a = [5,7,2,3,9,1]
-    # print(selectionSort(a, False))
+
 main()
 
 
