@@ -3,6 +3,8 @@ from random import randrange
 from time import time
 import os
 
+dash_div = ("-" * 67)
+
 
 def bubbleSort(unsort_list):
     arrayCopy = unsort_list.copy()
@@ -10,7 +12,7 @@ def bubbleSort(unsort_list):
     iteration = 0
     shifts = 0
     comparations = 0
-
+    print(str(range(len(arrayCopy) - 1)))
     for i in range(len(arrayCopy) - 1):
         for j in range(len(arrayCopy) - 1 - i):
             comparations += 1
@@ -149,6 +151,7 @@ def partition(array, start, end):
     array[right] = temp
     return right
 
+
 def selectionSort(unsort_list, debbug):
     array_copy = unsort_list.copy()
     print("             " + str(array_copy))
@@ -176,6 +179,7 @@ def selectionSort(unsort_list, debbug):
     analizeSelectionSort(unsort_list, comparations, shifts)
     return array_copy
 
+
 def insertionSort(unorderedArray):
     arrayCopy = unorderedArray.copy()
     print("             " + str(arrayCopy))
@@ -192,14 +196,15 @@ def insertionSort(unorderedArray):
                 shifts += 1
             else:
                 break
-            print("Iteración " + str(iteration) + ": " + str(unorderedArray))
+            print("Iteración " + str(iteration) + ": " + str(arrayCopy))
             iteration += 1
         arrayCopy[j + 1] = small
 
     print(comparition)
     print(shifts)
-    analizeInsertionSort(unorderedArray,comparition,shifts)
+    analizeInsertionSort(arrayCopy,comparition,shifts)
     return arrayCopy
+
 
 def menu():
     print((":" * 7) + " ORDENAMIENTOS " + (":" * 7))
@@ -210,41 +215,48 @@ def menu():
         option = input("Elige una opción: ")
     return option
 
+
 def analizeBubbleSort(numbers, comparations, shifts):
     nBubble = len(numbers)
-    print(("-" * 75))
-    print(('\t' * 3) + "|" + (" " * 5) +"COMPARACIONES" + (" " * 8) + ("|") + (" " * 6) + "INTERCAMBIOS" + (" " * 9))
-    print(("-" * 75))
-    print("Notación O  |" + (" " * 8) + "n^2 = " + str(nBubble ** 2) + (" " * 10) + "|" + (" " * 8) + "n^2 = ")
-    print("Complejidad |" + "   ((n - 1)n) / 2 = " + str((nBubble - 1) * nBubble / 2) + "  |" + (" " * 3) + "de 0 a ((n - 1)n) / 2 = [0," +
-          str((nBubble - 1) * nBubble / 2) + "]")
-    print(("-" * 75))
-    print("Realizadas  |" + (" " * 10) + str(comparations) + "|"  + ('\t' * 3) + str(shifts) )
-    print(("-" * 75) + '\n')
+    comparisonsO = "n^2 = " + str(nBubble ** 2)
+    shiftsO = "n^2 = "
+    comparisonsC = "((n-1)n)/2 = " + str((nBubble - 1) * nBubble / 2)
+    shiftsC = "((n-1)n)/2 = [0," + str((nBubble - 1) * nBubble / 2) + "]"
+    comparisonsR = str(comparations)
+    shiftsR = str(shifts)
+    analizeAlgorithm(comparisonsO, shiftsO, comparisonsC, shiftsC, comparisonsR, shiftsR)
+
 
 def analizeInsertionSort(numbers, comparations, shifts):
     nInsertion = len(numbers)
-    print(("-" * 75))
-    print(('\t' * 3) + "|" + (" " * 5) + "COMPARACIONES" + (" " * 8) + ("|") + (" " * 6) + "INTERCAMBIOS" + (" " * 9))
-    print(("-" * 75))
-    print("Notación O  |" + (" " * 8) + "n^2 = " + str(nInsertion ** 2) + (" " * 10) + "|" + (" " * 8) + "n^2 = ")
-    print("Complejidad |" + "   ((n - 1)n) / 2 = " + str((nInsertion - 1) * nInsertion / 2) + "  |" + (
-                " " * 3) + "de 0 a ((n - 1)n) / 2 = [0," +
-          str((nInsertion - 1) * nInsertion / 2) + "]")
-    print(("-" * 75))
-    print("Realizadas  |" + (" " * 10) + str(comparations) + "|" + ('\t' * 3) + str(shifts))
-    print(("-" * 75) + '\n')
+    comparisonsO = "n^2 = " + str(nInsertion ** 2)
+    shiftsO = "n^2 = "
+    comparisonsC = "((n-1)n)/2 = " + str((nInsertion - 1) * nInsertion / 2)
+    shiftsC = "((n-1)n)/2 = [0," + str((nInsertion - 1) * nInsertion / 2) + "]"
+    comparisonsR = str(comparations)
+    shiftsR = str(shifts)
+    analizeAlgorithm(comparisonsO, shiftsO, comparisonsC, shiftsC, comparisonsR, shiftsR)
+
 
 def analizeSelectionSort(numbers, comparations, shifts):
     nSelection = len(numbers)
-    print(('\t' * 3) + "|" + (" " * 5) + "COMPARACIONES" + (" " * 8) + ("|") + (" " * 6) + "INTERCAMBIOS" + (" " * 9))
-    print("Notación O  |" + (" " * 8) + "n^2 = " + str(nSelection ** 2) + (" " * 10) + "|" + (" " * 8) + "n^2 = ")
-    print("Complejidad |" + "   ((n - 1)n) / 2 = " + str((nSelection - 1) * nSelection / 2) + "  |" + (
-            " " * 3) + "de 0 a ((n - 1)n) / 2 = [0," +
-          str((nSelection - 1) * nSelection / 2) + "]")
-    print(("-" * 75))
-    print("Realizadas  |" + (" " * 10) + str(comparations) + "|" + ('\t' * 3) + str(shifts))
-    print(("-" * 75) + '\n')
+    comparisonsO = "n^2 = " + str(nSelection ** 2)
+    shiftsO = "n^2 = "
+    comparisonsC = "((n-1)n)/2 = " + str((nSelection - 1) * nSelection / 2)
+    shiftsC = "((n-1)n)/2 = [0," + str((nSelection - 1) * nSelection / 2) + "]"
+    comparisonsR = str(comparations)
+    shiftsR = str(shifts)
+    analizeAlgorithm(comparisonsO, shiftsO, comparisonsC, shiftsC, comparisonsR, shiftsR)
+
+
+def analizeAlgorithm(comparisonsO, shiftsO, comparisonsC, shiftsC, comparisonsR, shiftsR):
+    print(dash_div)
+    print("\t\t\t|\tCOMPARACIONES\t\t|\t\tINTERCAMBIOS")
+    print("Notación O\t|\t\t" + comparisonsO + "\t\t\t|\t\t\t" + shiftsO)
+    print("Complejidad\t|\t" + comparisonsC + "\t|\tde 0 a " + shiftsC)
+    print(dash_div)
+    print("Realizadas\t|\t\t" + comparisonsR + "\t\t\t\t|\t\t\t" + shiftsR)
+
 
 def userInput():
     dataLength = input("¿Cuántos datos?: ")
@@ -255,8 +267,8 @@ def userInput():
         for i in range(int(dataLength)):
             numbers.append(int(strInput[i]))
 
-    # print((":" * 7) + " BUBBLESORT " + (":" * 6))
-    # bubbleSort(numbers)
+    print((":" * 7) + " BUBBLESORT " + (":" * 6))
+    bubbleSort(numbers)
 
     # print((":" * 7) + " HEAPSORT " + (":" * 7))
     # print("             " + str(numbers))
@@ -272,13 +284,15 @@ def userInput():
     print((":" * 5) + " SELECTIONSORT " + (":" * 5))
     selectionSort(numbers, True)
 
-    # print((":" * 7) + " INSERTIONSORT " + (":" * 7))
-    # insertionSort(numbers)
+    print((":" * 7) + " INSERTIONSORT " + (":" * 7))
+    insertionSort(numbers)
+
 
 def genInput():
     rango = input("Introduce el rango: ")
     print("|" + (" " * 3) + "Ordenamiento" + (" " * 3) + "|" + (" " * 3) + "Comparaciones" + (" " * 3) + "|" + (" " * 3) + "Intercambios/desplazamientos" + (" " * 3) +
           "|" + (" " * 3) + ("Tiempo") + (" " * 3) + "|")
+
 
 def main():
     os.system('cls')
