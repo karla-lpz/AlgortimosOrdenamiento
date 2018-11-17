@@ -6,7 +6,7 @@ import os
 dash_div = ("-" * 67)
 
 
-def selection_sort(unsorted_array, debbug):
+def selection_sort(unsorted_array, debug):
     array_copy = unsorted_array.copy()
     print("             " + str(array_copy))
 
@@ -22,15 +22,16 @@ def selection_sort(unsorted_array, debbug):
             comparisons += 1
             if is_smaller:
                 smallest = j
+            iterations += 1
+            print("Iteración " + str(iterations) + ": " + str(array_copy))
+
         if not smallest == i:
             array_copy[i], array_copy[smallest] = array_copy[smallest], array_copy[i]
             swaps += 1
-        iterations += 1
-        print("Iteración " + str(iterations) + ": " + str(array_copy))
 
     print("Comparisons: " + str(comparisons))
     print("Swaps: " + str(swaps))
-    if debbug:
+    if debug:
         analize_selection_sort(n, comparisons, swaps)
     return array_copy
 
@@ -42,6 +43,42 @@ def analize_selection_sort(n, comparisons, shifts):
     shiftsC = "((n-1)n)/2 = [0," + str((n - 1) * n / 2) + "]"
     comparisonsR = str(comparisons)
     shiftsR = str(shifts)
+    analizeAlgorithm(comparisonsO, shiftsO, comparisonsC, shiftsC, comparisonsR, shiftsR)
+
+
+def insertion_sort(unsorted_array, debug):
+    array_copy = unsorted_array.copy()
+    print("             " + str(array_copy))
+
+    n = len(array_copy)
+    iterations = 0
+    swaps = 0
+    comparisons = 0
+
+    for i in range(n):
+        j = i
+        while j > 0 and array_copy[j] < array_copy[j - 1]:
+            comparisons += 1
+            array_copy[j], array_copy[j - 1] = array_copy[j - 1], array_copy[j]
+            swaps += 1
+            iterations += 1
+            print("Iteración " + str(iterations) + ": " + str(array_copy))
+            j -= 1
+
+    print("Comparisons: " + str(comparisons))
+    print("Swaps: " + str(swaps))
+    if debug:
+        analize_insertion_sort(n, comparisons, swaps)
+    return array_copy
+
+
+def analize_insertion_sort(n, comparisons, swaps):
+    comparisonsO = "n^2 = " + str(n ** 2)
+    shiftsO = "n^2 = "
+    comparisonsC = "((n-1)n)/2 = " + str((n - 1) * n / 2)
+    shiftsC = "((n-1)n)/2 = [0," + str((n - 1) * n / 2) + "]"
+    comparisonsR = str(comparisons)
+    shiftsR = str(swaps)
     analizeAlgorithm(comparisonsO, shiftsO, comparisonsC, shiftsC, comparisonsR, shiftsR)
 
 
@@ -191,32 +228,6 @@ def partition(array, start, end):
     return right
 
 
-def insertionSort(unorderedArray):
-    arrayCopy = unorderedArray.copy()
-    print("             " + str(arrayCopy))
-    iteration = 1
-    comparition = 0
-    shifts = 0
-
-    for i in range(1, len(arrayCopy)):
-        small = arrayCopy[i]
-        for j in reversed(range(-1, i)):
-            comparition += 1
-            if j >= 0 and small < arrayCopy[j]:
-                arrayCopy[j + 1], arrayCopy[j] = arrayCopy[j], arrayCopy[j + 1]
-                shifts += 1
-            else:
-                break
-            print("Iteración " + str(iteration) + ": " + str(arrayCopy))
-            iteration += 1
-        arrayCopy[j + 1] = small
-
-    print(comparition)
-    print(shifts)
-    analizeInsertionSort(arrayCopy,comparition,shifts)
-    return arrayCopy
-
-
 def menu():
     print((":" * 7) + " ORDENAMIENTOS " + (":" * 7))
     print("a) Ingresa los datos")
@@ -233,17 +244,6 @@ def analizeBubbleSort(numbers, comparations, shifts):
     shiftsO = "n^2 = "
     comparisonsC = "((n-1)n)/2 = " + str((nBubble - 1) * nBubble / 2)
     shiftsC = "((n-1)n)/2 = [0," + str((nBubble - 1) * nBubble / 2) + "]"
-    comparisonsR = str(comparations)
-    shiftsR = str(shifts)
-    analizeAlgorithm(comparisonsO, shiftsO, comparisonsC, shiftsC, comparisonsR, shiftsR)
-
-
-def analizeInsertionSort(numbers, comparations, shifts):
-    nInsertion = len(numbers)
-    comparisonsO = "n^2 = " + str(nInsertion ** 2)
-    shiftsO = "n^2 = "
-    comparisonsC = "((n-1)n)/2 = " + str((nInsertion - 1) * nInsertion / 2)
-    shiftsC = "((n-1)n)/2 = [0," + str((nInsertion - 1) * nInsertion / 2) + "]"
     comparisonsR = str(comparations)
     shiftsR = str(shifts)
     analizeAlgorithm(comparisonsO, shiftsO, comparisonsC, shiftsC, comparisonsR, shiftsR)
@@ -285,7 +285,7 @@ def userInput():
     selection_sort(numbers, True)
 
     print((":" * 7) + " INSERTIONSORT " + (":" * 7))
-    insertionSort(numbers)
+    insertion_sort(numbers, True)
 
 
 def genInput():
