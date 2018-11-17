@@ -29,8 +29,8 @@ def selection_sort(unsorted_array, debug):
             array_copy[i], array_copy[smallest] = array_copy[smallest], array_copy[i]
             swaps += 1
 
-    print("Comparisons: " + str(comparisons))
-    print("Swaps: " + str(swaps))
+    # print("Comparisons: " + str(comparisons))
+    # print("Swaps: " + str(swaps))
     if debug:
         analize_selection_sort(n, comparisons, swaps)
     return array_copy
@@ -65,8 +65,8 @@ def insertion_sort(unsorted_array, debug):
             print("Iteración " + str(iterations) + ": " + str(array_copy))
             j -= 1
 
-    print("Comparisons: " + str(comparisons))
-    print("Swaps: " + str(swaps))
+    # print("Comparisons: " + str(comparisons))
+    # print("Swaps: " + str(swaps))
     if debug:
         analize_insertion_sort(n, comparisons, swaps)
     return array_copy
@@ -82,24 +82,40 @@ def analize_insertion_sort(n, comparisons, swaps):
     analizeAlgorithm(comparisonsO, shiftsO, comparisonsC, shiftsC, comparisonsR, shiftsR)
 
 
-def bubbleSort(unsort_list):
-    arrayCopy = unsort_list.copy()
-    print("             " + str(arrayCopy))
-    iteration = 0
-    shifts = 0
-    comparations = 0
-    print(str(range(len(arrayCopy) - 1)))
-    for i in range(len(arrayCopy) - 1):
-        for j in range(len(arrayCopy) - 1 - i):
-            comparations += 1
-            if arrayCopy[j] > arrayCopy[j + 1]:
-                arrayCopy[j], arrayCopy[j + 1] = arrayCopy[j + 1], arrayCopy[j]
-                shifts += 1
-            iteration += 1
-            print("Iteración " + str(iteration) + ": " + str(arrayCopy))
+def bubble_sort(unsorted_array, debug):
+    array_copy = unsorted_array.copy()
+    print("             " + str(array_copy))
 
-    analizeBubbleSort(arrayCopy, comparations, shifts)
-    return shifts, comparations
+    n = len(array_copy)
+    iterations = 0
+    swaps = 0
+    comparisons = 0
+
+    for i in range(n - 1):
+        for j in range(n - 1 - i):
+            is_bigger = array_copy[j + 1] < array_copy[j]
+            comparisons += 1
+            if is_bigger:
+                array_copy[j], array_copy[j + 1] = array_copy[j + 1], array_copy[j]
+                swaps += 1
+            iterations += 1
+            print("Iteración " + str(iterations) + ": " + str(array_copy))
+
+    # print("Comparisons: " + str(comparisons))
+    # print("Swaps: " + str(swaps))
+    if debug:
+        analize_bubble_sort(n, comparisons, swaps)
+    return array_copy
+
+
+def analize_bubble_sort(n, comparisons, swaps):
+    comparisonsO = "n^2 = " + str(n ** 2)
+    shiftsO = "n^2 = "
+    comparisonsC = "((n-1)n)/2 = " + str((n - 1) * n / 2)
+    shiftsC = "((n-1)n)/2 = [0," + str((n - 1) * n / 2) + "]"
+    comparisonsR = str(comparisons)
+    shiftsR = str(swaps)
+    analizeAlgorithm(comparisonsO, shiftsO, comparisonsC, shiftsC, comparisonsR, shiftsR)
 
 
 def heapify(arr, n, i):
@@ -238,17 +254,6 @@ def menu():
     return option
 
 
-def analizeBubbleSort(numbers, comparations, shifts):
-    nBubble = len(numbers)
-    comparisonsO = "n^2 = " + str(nBubble ** 2)
-    shiftsO = "n^2 = "
-    comparisonsC = "((n-1)n)/2 = " + str((nBubble - 1) * nBubble / 2)
-    shiftsC = "((n-1)n)/2 = [0," + str((nBubble - 1) * nBubble / 2) + "]"
-    comparisonsR = str(comparations)
-    shiftsR = str(shifts)
-    analizeAlgorithm(comparisonsO, shiftsO, comparisonsC, shiftsC, comparisonsR, shiftsR)
-
-
 def analizeAlgorithm(comparisonsO, shiftsO, comparisonsC, shiftsC, comparisonsR, shiftsR):
     print(dash_div)
     print("\t\t\t|\tCOMPARACIONES\t\t|\t\tINTERCAMBIOS")
@@ -267,9 +272,6 @@ def userInput():
         for i in range(int(dataLength)):
             numbers.append(int(strInput[i]))
 
-    print((":" * 7) + " BUBBLESORT " + (":" * 6))
-    bubbleSort(numbers)
-
     # print((":" * 7) + " HEAPSORT " + (":" * 7))
     # print("             " + str(numbers))
     # heapSort(numbers)
@@ -286,6 +288,9 @@ def userInput():
 
     print((":" * 7) + " INSERTIONSORT " + (":" * 7))
     insertion_sort(numbers, True)
+
+    print((":" * 7) + " BUBBLESORT " + (":" * 6))
+    bubble_sort(numbers, True)
 
 
 def genInput():
