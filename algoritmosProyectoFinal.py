@@ -138,7 +138,7 @@ def init_merge_sort(unsorted_array, debug):
     # print("Comparisons: " + str(merge_sort_comparisons))
     # print("Swaps: " + str(merge_sort_swaps))
     if debug:
-        analize_bubble_sort(n, merge_sort_comparisons, merge_sort_swaps)
+        analize_merge_sort(n, merge_sort_comparisons, merge_sort_swaps)
     return array_copy
 
 
@@ -201,6 +201,63 @@ def analize_merge_sort(n, comparisons, swaps):
     analize_algorithm(comparisonsO, shiftsO, comparisonsC, shiftsC, comparisonsR, shiftsR)
 
 
+quick_sort_iterations = 0
+quick_sort_swaps = 0
+quick_sort_comparisons = 0
+
+
+def init_quick_sort(unsorted_array, debug):
+    array_copy = unsorted_array.copy()
+    print("             " + str(array_copy))
+
+    n = len(array_copy)
+    global quick_sort_iterations
+    quick_sort_iterations = 0
+    global quick_sort_comparisons
+    quick_sort_comparisons = 0
+    global quick_sort_swaps
+    quick_sort_swaps = 0
+    quick_sort(array_copy, 0, n - 1)
+    # print("Comparisons: " + str(merge_sort_comparisons))
+    # print("Swaps: " + str(merge_sort_swaps))
+    if debug:
+        analize_merge_sort(n, quick_sort_comparisons, quick_sort_swaps)
+    return array_copy
+
+
+def quick_sort(unsorted_array, lo, hi):
+    global quick_sort_iterations
+    quick_sort_iterations += 1
+    print("Iteration " + str(quick_sort_iterations) + ": " + str(unsorted_array))
+
+    if lo < hi:
+        p = partition(unsorted_array, lo, hi)
+        quick_sort(unsorted_array, lo, p - 1)
+        quick_sort(unsorted_array, p + 1, hi)
+
+
+def partition(array, lo, hi):
+    global quick_sort_swaps
+    global quick_sort_comparisons
+
+    pivot = array[hi]
+    i = (lo - 1)
+
+    for j in range(lo, hi):
+        is_smaller = array[j] < pivot
+        quick_sort_comparisons += 1
+        if is_smaller:
+            if not i == j:
+                i += 1
+                array[i], array[j] = array[j], array[i]
+                quick_sort_swaps += 1
+
+    i += 1
+    array[i], array[hi] = array[hi], array[i]
+    quick_sort_swaps += 1
+    return i
+
+
 def heapify(arr, n, i):
     largest = i  # Initialize largest as root
     l = 2 * i + 1  # left = 2*i + 1
@@ -248,47 +305,6 @@ def swap(A, x, y):
 
 
 
-def quickSort(array, start, end):
-    print("             " + str(array))
-
-    if start < end:
-        pivot = partition(array, start, end)
-
-        quickSort(array, start, pivot - 1)  ## array IZQ llamadas recursivas
-        quickSort(array, pivot + 1, end)  ##array DERCH llamasas recurivas
-    return array
-
-
-def partition(array, start, end):
-    ## El pivote se declara siempre al inicio del rango que desea acomodarse
-    pivot = array[start]
-
-    # Lado menores al pivote
-    left = start + 1
-
-    # Lado mayoreas al pivote
-    right = end
-    # miestras el lado IZQ sea mayor al DERCH el arreglo no esta arreglado
-    done = False
-    while not done:
-        while left <= right and array[left] <= pivot:
-            left = left + 1
-        while array[right] >= pivot and right >= left:
-            right = right - 1
-
-        if right < left:
-            done = True
-        else:
-            temp = array[left]
-            array[left] = array[right]
-            array[right] = temp
-
-    temp = array[start]
-    array[start] = array[right]
-    array[right] = temp
-    return right
-
-
 def menu():
     print((":" * 7) + " ORDENAMIENTOS " + (":" * 7))
     print("a) Ingresa los datos")
@@ -321,9 +337,6 @@ def userInput():
     # print("             " + str(numbers))
     # heapSort(numbers)
 
-    # print((":" * 7) + " QUICKSORT " + (":" * 7))
-    # quickSort(numbers, 0, len(numbers) - 1)
-
     print((":" * 7) + " SELECTIONSORT " + (":" * 7))
     selection_sort(numbers, True)
 
@@ -335,6 +348,9 @@ def userInput():
 
     print((":" * 7) + " MERGESORT " + (":" * 7))
     init_merge_sort(numbers, True)
+
+    print((":" * 7) + " QUICKSORT " + (":" * 7))
+    init_quick_sort(numbers, True)
 
 
 def genInput():
