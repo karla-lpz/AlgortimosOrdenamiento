@@ -6,6 +6,45 @@ import os
 dash_div = ("-" * 67)
 
 
+def selection_sort(unsorted_array, debbug):
+    array_copy = unsorted_array.copy()
+    print("             " + str(array_copy))
+
+    n = len(array_copy)
+    iterations = 0
+    swaps = 0
+    comparisons = 0
+
+    for i in range(n - 1):
+        smallest = i
+        for j in range(i + 1, n):
+            is_smaller = array_copy[j] < array_copy[smallest]
+            comparisons += 1
+            if is_smaller:
+                smallest = j
+        if not smallest == i:
+            array_copy[i], array_copy[smallest] = array_copy[smallest], array_copy[i]
+            swaps += 1
+        iterations += 1
+        print("Iteración " + str(iterations) + ": " + str(array_copy))
+
+    print("Comparisons: " + str(comparisons))
+    print("Swaps: " + str(swaps))
+    if debbug:
+        analize_selection_sort(n, comparisons, swaps)
+    return array_copy
+
+
+def analize_selection_sort(n, comparisons, shifts):
+    comparisonsO = "n^2 = " + str(n ** 2)
+    shiftsO = "n^2 = "
+    comparisonsC = "((n-1)n)/2 = " + str((n - 1) * n / 2)
+    shiftsC = "((n-1)n)/2 = [0," + str((n - 1) * n / 2) + "]"
+    comparisonsR = str(comparisons)
+    shiftsR = str(shifts)
+    analizeAlgorithm(comparisonsO, shiftsO, comparisonsC, shiftsC, comparisonsR, shiftsR)
+
+
 def bubbleSort(unsort_list):
     arrayCopy = unsort_list.copy()
     print("             " + str(arrayCopy))
@@ -152,34 +191,6 @@ def partition(array, start, end):
     return right
 
 
-def selectionSort(unsort_list, debbug):
-    array_copy = unsort_list.copy()
-    print("             " + str(array_copy))
-    lenght = len(array_copy)
-    iteration = 0
-    shifts = 0
-    comparations = 0
-
-    for i in range(0, lenght):
-        smallest = i
-        for j in range(i + 1, lenght):
-            comparations += 1
-            if array_copy[j] < array_copy[smallest]:
-                smallest = j
-        if min is not i:
-            temp = array_copy[i]
-            array_copy[i] = array_copy[smallest]
-            array_copy[smallest] = temp
-            shifts += 1
-        iteration += 1
-        print("Iteración " + str(iteration) + ": " + str(array_copy))
-
-    print(str(comparations))
-    print(str(shifts))
-    analizeSelectionSort(unsort_list, comparations, shifts)
-    return array_copy
-
-
 def insertionSort(unorderedArray):
     arrayCopy = unorderedArray.copy()
     print("             " + str(arrayCopy))
@@ -238,17 +249,6 @@ def analizeInsertionSort(numbers, comparations, shifts):
     analizeAlgorithm(comparisonsO, shiftsO, comparisonsC, shiftsC, comparisonsR, shiftsR)
 
 
-def analizeSelectionSort(numbers, comparations, shifts):
-    nSelection = len(numbers)
-    comparisonsO = "n^2 = " + str(nSelection ** 2)
-    shiftsO = "n^2 = "
-    comparisonsC = "((n-1)n)/2 = " + str((nSelection - 1) * nSelection / 2)
-    shiftsC = "((n-1)n)/2 = [0," + str((nSelection - 1) * nSelection / 2) + "]"
-    comparisonsR = str(comparations)
-    shiftsR = str(shifts)
-    analizeAlgorithm(comparisonsO, shiftsO, comparisonsC, shiftsC, comparisonsR, shiftsR)
-
-
 def analizeAlgorithm(comparisonsO, shiftsO, comparisonsC, shiftsC, comparisonsR, shiftsR):
     print(dash_div)
     print("\t\t\t|\tCOMPARACIONES\t\t|\t\tINTERCAMBIOS")
@@ -282,7 +282,7 @@ def userInput():
     # quickSort(numbers, 0, len(numbers) - 1)
 
     print((":" * 5) + " SELECTIONSORT " + (":" * 5))
-    selectionSort(numbers, True)
+    selection_sort(numbers, True)
 
     print((":" * 7) + " INSERTIONSORT " + (":" * 7))
     insertionSort(numbers)
