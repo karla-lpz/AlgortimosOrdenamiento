@@ -23,7 +23,7 @@ def selection_sort(unsorted_array, debug):
             if is_smaller:
                 smallest = j
             iterations += 1
-            print("Iteración " + str(iterations) + ": " + str(array_copy))
+            print("Iteration " + str(iterations) + ": " + str(array_copy))
 
         if not smallest == i:
             array_copy[i], array_copy[smallest] = array_copy[smallest], array_copy[i]
@@ -43,7 +43,7 @@ def analize_selection_sort(n, comparisons, shifts):
     shiftsC = "((n-1)n)/2 = [0," + str((n - 1) * n / 2) + "]"
     comparisonsR = str(comparisons)
     shiftsR = str(shifts)
-    analizeAlgorithm(comparisonsO, shiftsO, comparisonsC, shiftsC, comparisonsR, shiftsR)
+    analize_algorithm(comparisonsO, shiftsO, comparisonsC, shiftsC, comparisonsR, shiftsR)
 
 
 def insertion_sort(unsorted_array, debug):
@@ -62,7 +62,7 @@ def insertion_sort(unsorted_array, debug):
             array_copy[j], array_copy[j - 1] = array_copy[j - 1], array_copy[j]
             swaps += 1
             iterations += 1
-            print("Iteración " + str(iterations) + ": " + str(array_copy))
+            print("Iteration " + str(iterations) + ": " + str(array_copy))
             j -= 1
 
     # print("Comparisons: " + str(comparisons))
@@ -79,7 +79,7 @@ def analize_insertion_sort(n, comparisons, swaps):
     shiftsC = "((n-1)n)/2 = [0," + str((n - 1) * n / 2) + "]"
     comparisonsR = str(comparisons)
     shiftsR = str(swaps)
-    analizeAlgorithm(comparisonsO, shiftsO, comparisonsC, shiftsC, comparisonsR, shiftsR)
+    analize_algorithm(comparisonsO, shiftsO, comparisonsC, shiftsC, comparisonsR, shiftsR)
 
 
 def bubble_sort(unsorted_array, debug):
@@ -99,7 +99,7 @@ def bubble_sort(unsorted_array, debug):
                 array_copy[j], array_copy[j + 1] = array_copy[j + 1], array_copy[j]
                 swaps += 1
             iterations += 1
-            print("Iteración " + str(iterations) + ": " + str(array_copy))
+            print("Iteration " + str(iterations) + ": " + str(array_copy))
 
     # print("Comparisons: " + str(comparisons))
     # print("Swaps: " + str(swaps))
@@ -115,7 +115,90 @@ def analize_bubble_sort(n, comparisons, swaps):
     shiftsC = "((n-1)n)/2 = [0," + str((n - 1) * n / 2) + "]"
     comparisonsR = str(comparisons)
     shiftsR = str(swaps)
-    analizeAlgorithm(comparisonsO, shiftsO, comparisonsC, shiftsC, comparisonsR, shiftsR)
+    analize_algorithm(comparisonsO, shiftsO, comparisonsC, shiftsC, comparisonsR, shiftsR)
+
+
+merge_sort_iterations = 0
+merge_sort_swaps = 0
+merge_sort_comparisons = 0
+
+
+def init_merge_sort(unsorted_array, debug):
+    array_copy = unsorted_array.copy()
+    print("             " + str(array_copy))
+
+    n = len(array_copy)
+    global merge_sort_iterations
+    merge_sort_iterations = 0
+    global merge_sort_comparisons
+    merge_sort_comparisons = 0
+    global merge_sort_swaps
+    merge_sort_swaps = 0
+    merge_sort(array_copy)
+    # print("Comparisons: " + str(merge_sort_comparisons))
+    # print("Swaps: " + str(merge_sort_swaps))
+    if debug:
+        analize_bubble_sort(n, merge_sort_comparisons, merge_sort_swaps)
+    return array_copy
+
+
+def merge_sort(unsorted_array):
+    global merge_sort_iterations
+    merge_sort_iterations += 1
+    print("Iteration " + str(merge_sort_iterations) + ": " + str(unsorted_array))
+
+    n = len(unsorted_array)
+    if n <= 1:
+        return unsorted_array
+
+    left = []
+    right = []
+    middle = n / 2
+
+    for i in range(n):
+        if i < middle:
+            left.append(unsorted_array[i])
+        else:
+            right.append(unsorted_array[i])
+
+    print("Divide:\t" + str(unsorted_array) + " -> " + str(left) + " " + str(right))
+    merge_sort(left)
+    merge_sort(right)
+
+    return merge(left, right)
+
+
+def merge(left, right):
+    result = []
+
+    while len(left) > 0 and len(right) > 0:
+        is_smaller = left[0] < right[0]
+        global merge_sort_comparisons
+        merge_sort_comparisons += 1
+        if is_smaller:
+            result.append(left.pop())
+        else:
+            global merge_sort_swaps
+            merge_sort_swaps += 1
+            result.append(right.pop())
+
+    while len(left) > 0:
+        result.append(left.pop())
+    while len(right) > 0:
+        result.append(right.pop())
+
+    print("Merge: " + str(result))
+    return result
+
+
+def analize_merge_sort(n, comparisons, swaps):
+    comparisonsO = "n^2 = " + str(n ** 2)
+    shiftsO = "n^2 = "
+    comparisonsC = "((n-1)n)/2 = " + str((n - 1) * n / 2)
+    shiftsC = "((n-1)n)/2 = [0," + str((n - 1) * n / 2) + "]"
+    comparisonsR = str(comparisons)
+    shiftsR = str(swaps)
+    analize_algorithm(comparisonsO, shiftsO, comparisonsC, shiftsC, comparisonsR, shiftsR)
 
 
 def heapify(arr, n, i):
@@ -162,45 +245,7 @@ def swap(A, x, y):
     A[y] = tmp
 
 
-def mergeSort(array):
-    iteration = 1
-    # Punto medio del arreglo
-    mitad = len(array) // 2
 
-    # lft es igual al arreglo en la primera parte (IZQ)
-    # rgt es igual al arreglo en la segunda parte (DER)
-    lft, rgt = array[:mitad], array[mitad:]
-
-    # si el arreglo en la parte izquierda es mayor a 1
-    # llama a marge sort de nuevo
-    # metodo recursivo
-    if len(lft) > 1:
-        lft = mergeSort(lft)
-    # Si el arreglo en la parte derecha es mayor a 1
-    # llama a merge sort de nuevo
-    # metodo recursivo
-    if len(rgt) > 1:
-        rgt = mergeSort(rgt)
-    # arreglo de apollo
-    res = []
-
-    while lft and rgt:
-        # Si el ultimo elemento del arreglo izquierdo es mayor o igual al derecho
-        # asignar al areglo de apoyo el valor izquierdo
-        # en otro caso asignar el derecho
-        if lft[-1] >= rgt[-1]:
-            res.append(lft.pop())
-        else:
-            res.append(rgt.pop())
-
-        print("Iteración " + str(iteration) + ": " + str(array))
-        iteration += 1
-    # Estado del arreglo de apoyo = [MAX,...,MIN]
-    # Ordenar el arreglo en reversa
-    res.reverse()
-
-    # Asignar los ultimos elementos de lft y rgt al areglo teporal
-    return (lft or rgt) + res
 
 
 def quickSort(array, start, end):
@@ -254,7 +299,7 @@ def menu():
     return option
 
 
-def analizeAlgorithm(comparisonsO, shiftsO, comparisonsC, shiftsC, comparisonsR, shiftsR):
+def analize_algorithm(comparisonsO, shiftsO, comparisonsC, shiftsC, comparisonsR, shiftsR):
     print(dash_div)
     print("\t\t\t|\tCOMPARACIONES\t\t|\t\tINTERCAMBIOS")
     print("Notación O\t|\t\t" + comparisonsO + "\t\t\t|\t\t\t" + shiftsO)
@@ -276,21 +321,20 @@ def userInput():
     # print("             " + str(numbers))
     # heapSort(numbers)
 
-    # print((":" * 7) + " MERGESORT " + (":" * 7))
-    # print("             " + str(numbers))
-    # mergeSort(numbers)
-
     # print((":" * 7) + " QUICKSORT " + (":" * 7))
     # quickSort(numbers, 0, len(numbers) - 1)
 
-    print((":" * 5) + " SELECTIONSORT " + (":" * 5))
+    print((":" * 7) + " SELECTIONSORT " + (":" * 7))
     selection_sort(numbers, True)
 
     print((":" * 7) + " INSERTIONSORT " + (":" * 7))
     insertion_sort(numbers, True)
 
-    print((":" * 7) + " BUBBLESORT " + (":" * 6))
+    print((":" * 7) + " BUBBLESORT " + (":" * 7))
     bubble_sort(numbers, True)
+
+    print((":" * 7) + " MERGESORT " + (":" * 7))
+    init_merge_sort(numbers, True)
 
 
 def genInput():
