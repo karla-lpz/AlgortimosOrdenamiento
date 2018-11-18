@@ -286,7 +286,6 @@ def init_heap_sort(unsorted_array, debug):
     heap_sort(array_copy)
     if debug:
         analize_heap_sort(n, heap_sort_comparisons, heap_sort_swaps)
-    print("             " + str(array_copy))
     return array_copy
 
 
@@ -297,6 +296,9 @@ def heap_sort(a):
     end = count - 1
     while end > 0:
         a[end], a[0] = a[0], a[end]
+        global heap_sort_swaps
+        heap_sort_swaps += 1
+        print("Iteration " + str(heap_sort_iterations) + ": " + str(a))
         end -= 1
         sift_down(a, 0, end)
 
@@ -310,21 +312,29 @@ def heapify(a, count):
 
 
 def sift_down(a, start, end):
+    global heap_sort_iterations
+    global heap_sort_comparisons
     root = start
 
     while i_left_child(root) <= end:
+        heap_sort_iterations += 1
         child = i_left_child(root)
         swap = root
 
         if a[swap] < a[child]:
+            heap_sort_comparisons += 1
             swap = child
         if child + 1 <= end and a[swap] < a[child + 1]:
+            heap_sort_comparisons += 1
             swap = child + 1
         if swap == root:
             return
         else:
             a[root], a[swap] = a[swap], a[root]
             root = swap
+            global heap_sort_swaps
+            heap_sort_swaps += 1
+            print("Iteration " + str(heap_sort_iterations) + ": " + str(a))
 
 
 def analize_heap_sort(n, comparisons, swaps):
