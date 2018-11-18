@@ -1,6 +1,4 @@
-from heapq import heappush, heappop
-from random import randrange
-from time import time
+import math
 import os
 
 dash_div = ("-" * 67)
@@ -29,8 +27,6 @@ def selection_sort(unsorted_array, debug):
             array_copy[i], array_copy[smallest] = array_copy[smallest], array_copy[i]
             swaps += 1
 
-    # print("Comparisons: " + str(comparisons))
-    # print("Swaps: " + str(swaps))
     if debug:
         analize_selection_sort(n, comparisons, swaps)
     return array_copy
@@ -65,8 +61,6 @@ def insertion_sort(unsorted_array, debug):
             print("Iteration " + str(iterations) + ": " + str(array_copy))
             j -= 1
 
-    # print("Comparisons: " + str(comparisons))
-    # print("Swaps: " + str(swaps))
     if debug:
         analize_insertion_sort(n, comparisons, swaps)
     return array_copy
@@ -101,8 +95,6 @@ def bubble_sort(unsorted_array, debug):
             iterations += 1
             print("Iteration " + str(iterations) + ": " + str(array_copy))
 
-    # print("Comparisons: " + str(comparisons))
-    # print("Swaps: " + str(swaps))
     if debug:
         analize_bubble_sort(n, comparisons, swaps)
     return array_copy
@@ -135,8 +127,6 @@ def init_merge_sort(unsorted_array, debug):
     global merge_sort_swaps
     merge_sort_swaps = 0
     merge_sort(array_copy)
-    # print("Comparisons: " + str(merge_sort_comparisons))
-    # print("Swaps: " + str(merge_sort_swaps))
     if debug:
         analize_merge_sort(n, merge_sort_comparisons, merge_sort_swaps)
     return array_copy
@@ -218,10 +208,8 @@ def init_quick_sort(unsorted_array, debug):
     global quick_sort_swaps
     quick_sort_swaps = 0
     quick_sort(array_copy, 0, n - 1)
-    # print("Comparisons: " + str(merge_sort_comparisons))
-    # print("Swaps: " + str(merge_sort_swaps))
     if debug:
-        analize_merge_sort(n, quick_sort_comparisons, quick_sort_swaps)
+        analize_quick_sort(n, quick_sort_comparisons, quick_sort_swaps)
     return array_copy
 
 
@@ -229,7 +217,6 @@ def quick_sort(unsorted_array, lo, hi):
     global quick_sort_iterations
     quick_sort_iterations += 1
     print("Iteration " + str(quick_sort_iterations) + ": " + str(unsorted_array))
-
     if lo < hi:
         p = partition(unsorted_array, lo, hi)
         quick_sort(unsorted_array, lo, p - 1)
@@ -258,51 +245,89 @@ def partition(array, lo, hi):
     return i
 
 
-def heapify(arr, n, i):
-    largest = i  # Initialize largest as root
-    l = 2 * i + 1  # left = 2*i + 1
-    r = 2 * i + 2  # right = 2*i + 2
-
-    # See if left child of root exists and is
-    # greater than root
-    if l < n and arr[i] < arr[l]:
-        largest = l
-
-        # See if right child of root exists and is
-    # greater than root
-    if r < n and arr[largest] < arr[r]:
-        largest = r
-
-        # Change root, if needed
-    if largest != i:
-        arr[i], arr[largest] = arr[largest], arr[i]  # swap
-
-        # Heapify the root.
-        heapify(arr, n, largest)
-
-    # The main function to sort an array of given size
+def analize_quick_sort(n, comparisons, swaps):
+    comparisonsO = "n^2 = " + str(n ** 2)
+    shiftsO = "n^2 = "
+    comparisonsC = "((n-1)n)/2 = " + str((n - 1) * n / 2)
+    shiftsC = "((n-1)n)/2 = [0," + str((n - 1) * n / 2) + "]"
+    comparisonsR = str(comparisons)
+    shiftsR = str(swaps)
+    analize_algorithm(comparisonsO, shiftsO, comparisonsC, shiftsC, comparisonsR, shiftsR)
 
 
-def heapSort(arr):
-    n = len(arr)
-
-    # Build a maxheap.
-    for i in range(n, -1, -1):
-        heapify(arr, n, i)
-
-        # One by one extract elements
-    for i in range(n - 1, 0, -1):
-        arr[i], arr[0] = arr[0], arr[i]  # swap
-        heapify(arr, i, 0)
+heap_sort_iterations = 0
+heap_sort_swaps = 0
+heap_sort_comparisons = 0
 
 
-def swap(A, x, y):
-    tmp = A[x]
-    A[x] = A[y]
-    A[y] = tmp
+def i_parent(i):
+    return math.floor((i - 1) / 2)
 
 
+def i_left_child(i):
+    return 2 * i + 1
 
+
+def i_right_child(i):
+    return 2 * i + 2
+
+
+def init_heap_sort(unsorted_array, debug):
+    array_copy = unsorted_array.copy()
+    print("             " + str(array_copy))
+
+    n = len(array_copy)
+    global heap_sort_iterations
+    heap_sort_iterations = 0
+    global heap_sort_comparisons
+    heap_sort_comparisons = 0
+    global heap_sort_swaps
+    heap_sort_swaps = 0
+    heap_sort(array_copy)
+    if debug:
+        analize_heap_sort(n, heap_sort_comparisons, heap_sort_swaps)
+    print("             " + str(array_copy))
+    return array_copy
+
+
+def heap_sort(unsorted_array):
+    heapify(unsorted_array)
+
+    end = len(unsorted_array) - 1
+    while end > 0:
+        unsorted_array[end], unsorted_array[0] = unsorted_array[0], unsorted_array[end]
+        end -= 1
+        sift_up(unsorted_array, 0, end)
+
+
+def heapify(unsorted_array):
+    end = 1
+
+    while end < len(unsorted_array):
+        sift_up(unsorted_array, 0, end)
+        end += 1
+
+
+def sift_up(unsorted_array, start, end):
+    child = end
+
+    while child > start:
+        parent = i_parent(child)
+        if unsorted_array[parent] < unsorted_array[child]:
+            unsorted_array[parent], unsorted_array[child] = unsorted_array[child], unsorted_array[parent]
+            child = parent
+        else:
+            return
+
+
+def analize_heap_sort(n, comparisons, swaps):
+    comparisonsO = "n^2 = " + str(n ** 2)
+    shiftsO = "n^2 = "
+    comparisonsC = "((n-1)n)/2 = " + str((n - 1) * n / 2)
+    shiftsC = "((n-1)n)/2 = [0," + str((n - 1) * n / 2) + "]"
+    comparisonsR = str(comparisons)
+    shiftsR = str(swaps)
+    analize_algorithm(comparisonsO, shiftsO, comparisonsC, shiftsC, comparisonsR, shiftsR)
 
 
 def menu():
@@ -333,10 +358,6 @@ def userInput():
         for i in range(int(dataLength)):
             numbers.append(int(strInput[i]))
 
-    # print((":" * 7) + " HEAPSORT " + (":" * 7))
-    # print("             " + str(numbers))
-    # heapSort(numbers)
-
     print((":" * 7) + " SELECTIONSORT " + (":" * 7))
     selection_sort(numbers, True)
 
@@ -351,6 +372,9 @@ def userInput():
 
     print((":" * 7) + " QUICKSORT " + (":" * 7))
     init_quick_sort(numbers, True)
+
+    print((":" * 7) + " HEAPSORT " + (":" * 7))
+    init_heap_sort(numbers, True)
 
 
 def genInput():
