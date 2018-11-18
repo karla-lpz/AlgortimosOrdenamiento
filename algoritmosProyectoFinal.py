@@ -290,34 +290,41 @@ def init_heap_sort(unsorted_array, debug):
     return array_copy
 
 
-def heap_sort(unsorted_array):
-    heapify(unsorted_array)
+def heap_sort(a):
+    count = len(a)
+    heapify(a, count)
 
-    end = len(unsorted_array) - 1
+    end = count - 1
     while end > 0:
-        unsorted_array[end], unsorted_array[0] = unsorted_array[0], unsorted_array[end]
+        a[end], a[0] = a[0], a[end]
         end -= 1
-        sift_up(unsorted_array, 0, end)
+        sift_down(a, 0, end)
 
 
-def heapify(unsorted_array):
-    end = 1
+def heapify(a, count):
+    start = i_parent(count - 1)
 
-    while end < len(unsorted_array):
-        sift_up(unsorted_array, 0, end)
-        end += 1
+    while start >= 0:
+        sift_down(a, start, count - 1)
+        start -= 1
 
 
-def sift_up(unsorted_array, start, end):
-    child = end
+def sift_down(a, start, end):
+    root = start
 
-    while child > start:
-        parent = i_parent(child)
-        if unsorted_array[parent] < unsorted_array[child]:
-            unsorted_array[parent], unsorted_array[child] = unsorted_array[child], unsorted_array[parent]
-            child = parent
-        else:
+    while i_left_child(root) <= end:
+        child = i_left_child(root)
+        swap = root
+
+        if a[swap] < a[child]:
+            swap = child
+        if child + 1 <= end and a[swap] < a[child + 1]:
+            swap = child + 1
+        if swap == root:
             return
+        else:
+            a[root], a[swap] = a[swap], a[root]
+            root = swap
 
 
 def analize_heap_sort(n, comparisons, swaps):
