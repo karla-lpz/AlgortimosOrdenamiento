@@ -1,10 +1,14 @@
 import math
 import os
+import random
+import time
 
 dash_div = ("-" * 67)
+dash_divb = ("-" * 90)
 
 
 def selection_sort(unsorted_array, debug):
+    initial_time = time.time()
     array_copy = unsorted_array.copy()
     print("             " + str(array_copy))
 
@@ -26,7 +30,8 @@ def selection_sort(unsorted_array, debug):
         if not smallest == i:
             array_copy[i], array_copy[smallest] = array_copy[smallest], array_copy[i]
             swaps += 1
-
+    final_time = time.time()
+    total = final_time - initial_time
     if debug:
         analize_selection_sort(n, comparisons, swaps)
     return array_copy
@@ -53,8 +58,9 @@ def insertion_sort(unsorted_array, debug):
 
     for i in range(n):
         j = i
-        while j > 0 and array_copy[j] < array_copy[j - 1]:
-            comparisons += 1
+        isBigger = array_copy[j] < array_copy[j - 1]
+        comparisons += 1
+        while j > 0 and isBigger:
             array_copy[j], array_copy[j - 1] = array_copy[j - 1], array_copy[j]
             swaps += 1
             iterations += 1
@@ -97,6 +103,8 @@ def bubble_sort(unsorted_array, debug):
 
     if debug:
         analize_bubble_sort(n, comparisons, swaps)
+    # else:
+    #     recolect_bubble_data(comparisons,swaps)
     return array_copy
 
 
@@ -346,11 +354,31 @@ def analize_heap_sort(n, comparisons, swaps):
     shiftsR = str(swaps)
     analize_algorithm(comparisonsO, shiftsO, comparisonsC, shiftsC, comparisonsR, shiftsR)
 
+def recolect_bubble_data(comparisions, swaps):
+    print("|\tBUBBLESORT\t\t\t|\t" + comparisions + "\t|" + swaps + "\t\t\t|")
+
+def createTable():
+    print(dash_divb)
+    print(("|\tORDENAMIENTO\t\t|\tCOMPARACIONES\t|\tINTERCABIOS/DESPLAZAMIENTOS\t\t|\tTIEMPO\t|"))
+    print(dash_divb)
+    print("|\tSELECTIONSORT\t\t|")
+    print(dash_divb)
+    print("|\tINSERTIONSORT\t\t|")
+    print(dash_divb)
+    print("|\tBUBBLESORT\t\t\t|")
+    print(dash_divb)
+    print("|\tMERGESORT\t\t\t|")
+    print(dash_divb)
+    print("|\tQUICKSORT\t\t\t|")
+    print(dash_divb)
+    print("|\tHEAPSORT\t\t\t|")
+    print(dash_divb)
+
 
 def menu():
     print((":" * 7) + " ORDENAMIENTOS " + (":" * 7))
     print("a) Ingresa los datos")
-    print("b) Ingresa un rango")
+    print("b) Ingresar cantidad de datos")
     option = ""
     while not option == "a" and not option == "b":
         option = input("Elige una opción: ")
@@ -359,11 +387,13 @@ def menu():
 
 def analize_algorithm(comparisonsO, shiftsO, comparisonsC, shiftsC, comparisonsR, shiftsR):
     print(dash_div)
-    print("\t\t\t|\tCOMPARACIONES\t\t|\t\tINTERCAMBIOS")
-    print("Notación O\t|\t\t" + comparisonsO + "\t\t\t|\t\t\t" + shiftsO)
+    print("\t\t\t|\tCOMPARACIONES\t\t|\t\tINTERCAMBIOS\t\t|")
+    print("Notación O\t|\t\t" + comparisonsO + "\t\t|\t\t\t" + shiftsO + "\t\t\t|")
     print("Complejidad\t|\t" + comparisonsC + "\t|\tde 0 a " + shiftsC)
     print(dash_div)
-    print("Realizadas\t|\t\t" + comparisonsR + "\t\t\t\t|\t\t\t" + shiftsR)
+    print("Realizadas\t|\t\t" + comparisonsR + "\t\t\t\t|\t\t\t" + shiftsR + "\t\t\t|")
+    print(dash_div)
+    print("Tiempo de ejecución: ")
 
 
 def userInput():
@@ -394,11 +424,23 @@ def userInput():
     init_heap_sort(numbers, True)
 
 
-def genInput():
-    rango = input("Introduce el rango: ")
-    print("|" + (" " * 3) + "Ordenamiento" + (" " * 3) + "|" + (" " * 3) + "Comparaciones" + (" " * 3) + "|" + (" " * 3) + "Intercambios/desplazamientos" + (" " * 3) +
-          "|" + (" " * 3) + ("Tiempo") + (" " * 3) + "|")
 
+def fileCreating(numberFile):
+    print("Ingrese cuantos numeros aleatorios desea obtener: ")
+    numbers = int(input())
+    randomNumbers = [random.randint(0, 1000) for _ in range(numbers)]
+    with open(numberFile, 'w') as numbers:
+        numbers.write("[")
+        for i in range(len(randomNumbers)):
+            numbers.write(str(randomNumbers[i]))
+            if i != len(randomNumbers) - 1:
+                numbers.write(",")
+        numbers.write("]")
+
+
+def genInput():
+    fileCreating('numbers.txt')
+    createTable()
 
 def main():
     os.system('cls')
