@@ -3,34 +3,47 @@ import random
 import time
 
 dash_div = ("-" * 67)
-dash_divb = ("-" * 90)
+dash_divb = ("-" * 93)
+
+
+selection_sort_iterations = 0
+selection_sort_swaps = 0
+selection_sort_comparisons = 0
+selection_sort_time = time.time()
 
 
 def selection_sort(unsorted_array, debug):
     array_copy = unsorted_array.copy()
-    print("             " + str(array_copy))
+    if debug:
+        print("             " + str(array_copy))
 
     n = len(array_copy)
-    iterations = 0
-    swaps = 0
-    comparisons = 0
+    global selection_sort_iterations
+    selection_sort_iterations = 0
+    global selection_sort_swaps
+    selection_sort_swaps = 0
+    global selection_sort_comparisons
+    selection_sort_comparisons = 0
     initial_time = time.time()
     for i in range(n - 1):
         smallest = i
         for j in range(i + 1, n):
             is_smaller = array_copy[j] < array_copy[smallest]
-            comparisons += 1
+            selection_sort_comparisons += 1
             if is_smaller:
                 smallest = j
-            iterations += 1
-            print("Iteration " + str(iterations) + ": " + str(array_copy))
+            selection_sort_iterations += 1
+            if debug:
+                print("Iteration " + str(selection_sort_iterations) + ": " + str(array_copy))
 
         if not smallest == i:
             array_copy[i], array_copy[smallest] = array_copy[smallest], array_copy[i]
-            swaps += 1
+            selection_sort_swaps += 1
     final_time = time.time()
+    global selection_sort_time
+    selection_sort_time = final_time - initial_time
     if debug:
-        analize_selection_sort(n, comparisons, swaps, final_time - initial_time)
+        analize_selection_sort(n, selection_sort_comparisons, selection_sort_swaps, selection_sort_time)
     return array_copy
 
 
@@ -47,29 +60,41 @@ def analize_selection_sort(n, comparisons, shifts, exec_time):
     analize_algorithm(comparisons_o, swap_o, comparisons_c, shifts_c, comparisons_r, shifts_r, exec_time)
 
 
+insertion_sort_iterations = 0
+insertion_sort_swaps = 0
+insertion_sort_comparisons = 0
+insertion_sort_time = time.time()
+
+
 def insertion_sort(unsorted_array, debug):
     array_copy = unsorted_array.copy()
-    print("             " + str(array_copy))
+    if debug:
+        print("             " + str(array_copy))
 
     n = len(array_copy)
-    iterations = 0
-    swaps = 0
-    comparisons = 0
+    global insertion_sort_iterations
+    insertion_sort_iterations = 0
+    global insertion_sort_swaps
+    insertion_sort_swaps = 0
+    global insertion_sort_comparisons
+    insertion_sort_comparisons = 0
     initial_time = time.time()
 
     for i in range(1, n):
         for j in reversed(range(1, i + 1)):
-            iterations += 1
+            insertion_sort_iterations += 1
             is_bigger = array_copy[j - 1] > array_copy[j]
-            comparisons += 1
+            insertion_sort_comparisons += 1
             if is_bigger:
                 array_copy[j], array_copy[j - 1] = array_copy[j - 1], array_copy[j]
-                swaps += 1
-            print("Iteration " + str(iterations) + ": " + str(array_copy))
+                insertion_sort_swaps += 1
+            if debug:
+                print("Iteration " + str(insertion_sort_iterations) + ": " + str(array_copy))
 
-    final_time = time.time()
+    global insertion_sort_time
+    insertion_sort_time = time.time() - initial_time
     if debug:
-        analize_insertion_sort(n, comparisons, swaps, final_time - initial_time)
+        analize_insertion_sort(n, insertion_sort_comparisons, insertion_sort_swaps, insertion_sort_time)
     return array_copy
 
 
@@ -86,27 +111,39 @@ def analize_insertion_sort(n, comparisons, swaps, exec_time):
     analize_algorithm(comparisons_o, swap_o, comparisons_c, shifts_c, comparisons_r, shifts_r, exec_time)
 
 
+bubble_sort_iterations = 0
+bubble_sort_swaps = 0
+bubble_sort_comparisons = 0
+bubble_sort_time = time.time()
+
+
 def bubble_sort(unsorted_array, debug):
     array_copy = unsorted_array.copy()
-    print("             " + str(array_copy))
+    if debug:
+        print("             " + str(array_copy))
 
     n = len(array_copy)
-    iterations = 0
-    swaps = 0
-    comparisons = 0
+    global bubble_sort_iterations
+    bubble_sort_iterations = 0
+    global bubble_sort_swaps
+    bubble_sort_swaps = 0
+    global bubble_sort_comparisons
+    bubble_sort_comparisons = 0
     initial_time = time.time()
     for i in range(n - 1):
         for j in range(n - 1 - i):
             is_bigger = array_copy[j + 1] < array_copy[j]
-            comparisons += 1
+            bubble_sort_comparisons += 1
             if is_bigger:
                 array_copy[j], array_copy[j + 1] = array_copy[j + 1], array_copy[j]
-                swaps += 1
-            iterations += 1
-            print("Iteration " + str(iterations) + ": " + str(array_copy))
-    final_time = time.time()
+                bubble_sort_swaps += 1
+            bubble_sort_iterations += 1
+            if debug:
+                print("Iteration " + str(bubble_sort_iterations) + ": " + str(array_copy))
+    global bubble_sort_time
+    bubble_sort_time = time.time() - initial_time
     if debug:
-        analize_bubble_sort(n, comparisons, swaps, final_time - initial_time)
+        analize_bubble_sort(n, bubble_sort_comparisons, bubble_sort_swaps, bubble_sort_time)
     return array_copy
 
 
@@ -126,11 +163,13 @@ def analize_bubble_sort(n, comparisons, swaps, exec_time):
 merge_sort_iterations = 0
 merge_sort_swaps = 0
 merge_sort_comparisons = 0
+merge_sort_time = time.time()
 
 
 def init_merge_sort(unsorted_array, debug):
     array_copy = unsorted_array.copy()
-    print("             " + str(array_copy))
+    if debug:
+        print("             " + str(array_copy))
 
     n = len(array_copy)
     global merge_sort_iterations
@@ -140,17 +179,19 @@ def init_merge_sort(unsorted_array, debug):
     global merge_sort_swaps
     merge_sort_swaps = 0
     initial_time = time.time()
-    merge_sort(array_copy)
-    final_time = time.time()
+    merge_sort(array_copy, debug)
+    global merge_sort_time
+    merge_sort_time = time.time() - initial_time
     if debug:
-        analize_merge_sort(n, merge_sort_comparisons, merge_sort_swaps, final_time - initial_time)
+        analize_merge_sort(n, merge_sort_comparisons, merge_sort_swaps, merge_sort_time)
     return array_copy
 
 
-def merge_sort(unsorted_array):
+def merge_sort(unsorted_array, debug):
     global merge_sort_iterations
     merge_sort_iterations += 1
-    print("Iteration " + str(merge_sort_iterations) + ": " + str(unsorted_array))
+    if debug:
+        print("Iteration " + str(merge_sort_iterations) + ": " + str(unsorted_array))
 
     n = len(unsorted_array)
     if n <= 1:
@@ -166,16 +207,18 @@ def merge_sort(unsorted_array):
         else:
             right.append(unsorted_array[i])
 
-    print("Divide:\t" + str(unsorted_array) + " -> " + str(left) + " " + str(right))
-    left = merge_sort(left)
-    right = merge_sort(right)
+    if debug:
+        print("Divide:\t" + str(unsorted_array) + " -> " + str(left) + " " + str(right))
+    left = merge_sort(left, debug)
+    right = merge_sort(right, debug)
 
-    return merge(left, right)
+    return merge(left, right, debug)
 
 
-def merge(left, right):
+def merge(left, right, debug):
     result = []
-    message = "Merge: " + str(left) + " " + str(right) + " -> "
+    if debug:
+        message = "Merge: " + str(left) + " " + str(right) + " -> "
 
     while len(left) > 0 and len(right) > 0:
         is_smaller = left[0] <= right[0]
@@ -193,7 +236,8 @@ def merge(left, right):
     while len(right) > 0:
         result.append(right.pop())
 
-    print(message + str(result))
+    if debug:
+        print(message + str(result))
     return result
 
 
@@ -213,11 +257,13 @@ def analize_merge_sort(n, comparisons, swaps, exec_time):
 quick_sort_iterations = 0
 quick_sort_swaps = 0
 quick_sort_comparisons = 0
+quick_sort_time = time.time()
 
 
 def init_quick_sort(unsorted_array, debug):
     array_copy = unsorted_array.copy()
-    print("             " + str(array_copy))
+    if debug:
+        print("             " + str(array_copy))
 
     n = len(array_copy)
     global quick_sort_iterations
@@ -227,21 +273,23 @@ def init_quick_sort(unsorted_array, debug):
     global quick_sort_swaps
     quick_sort_swaps = 0
     initial_time = time.time()
-    quick_sort(array_copy, 0, n - 1)
-    final_time = time.time()
+    quick_sort(array_copy, 0, n - 1, debug)
+    global quick_sort_time
+    quick_sort_time = time.time() - initial_time
     if debug:
-        analize_quick_sort(n, quick_sort_comparisons, quick_sort_swaps, final_time - initial_time)
+        analize_quick_sort(n, quick_sort_comparisons, quick_sort_swaps, quick_sort_time)
     return array_copy
 
 
-def quick_sort(unsorted_array, lo, hi):
+def quick_sort(unsorted_array, lo, hi, debug):
     global quick_sort_iterations
     quick_sort_iterations += 1
-    print("Iteration " + str(quick_sort_iterations) + ": " + str(unsorted_array))
+    if debug:
+        print("Iteration " + str(quick_sort_iterations) + ": " + str(unsorted_array))
     if lo < hi:
         p = partition(unsorted_array, lo, hi)
-        quick_sort(unsorted_array, lo, p - 1)
-        quick_sort(unsorted_array, p + 1, hi)
+        quick_sort(unsorted_array, lo, p - 1, debug)
+        quick_sort(unsorted_array, p + 1, hi, debug)
 
 
 def partition(array, lo, hi):
@@ -282,6 +330,7 @@ def analize_quick_sort(n, comparisons, swaps, exec_time):
 heap_sort_iterations = 0
 heap_sort_swaps = 0
 heap_sort_comparisons = 0
+heap_sort_time = time.time()
 
 
 def i_parent(i):
@@ -298,7 +347,8 @@ def i_right_child(i):
 
 def init_heap_sort(unsorted_array, debug):
     array_copy = unsorted_array.copy()
-    print("             " + str(array_copy))
+    if debug:
+        print("             " + str(array_copy))
 
     n = len(array_copy)
     global heap_sort_iterations
@@ -308,36 +358,38 @@ def init_heap_sort(unsorted_array, debug):
     global heap_sort_swaps
     heap_sort_swaps = 0
     initial_time = time.time()
-    heap_sort(array_copy)
-    final_time = time.time()
+    heap_sort(array_copy, debug)
+    global heap_sort_time
+    heap_sort_time = time.time() - initial_time
     if debug:
-        analize_heap_sort(n, heap_sort_comparisons, heap_sort_swaps, final_time - initial_time)
+        analize_heap_sort(n, heap_sort_comparisons, heap_sort_swaps, heap_sort_time)
     return array_copy
 
 
-def heap_sort(a):
+def heap_sort(a, debug):
     count = len(a)
-    heapify(a, count)
+    heapify(a, count, debug)
 
     end = count - 1
     while end > 0:
         a[end], a[0] = a[0], a[end]
         global heap_sort_swaps
         heap_sort_swaps += 1
-        print("Iteration " + str(heap_sort_iterations) + ": " + str(a))
+        if debug:
+            print("Iteration " + str(heap_sort_iterations) + ": " + str(a))
         end -= 1
-        sift_down(a, 0, end)
+        sift_down(a, 0, end, debug)
 
 
-def heapify(a, count):
+def heapify(a, count, debug):
     start = i_parent(count - 1)
 
     while start >= 0:
-        sift_down(a, start, count - 1)
+        sift_down(a, start, count - 1, debug)
         start -= 1
 
 
-def sift_down(a, start, end):
+def sift_down(a, start, end, debug):
     global heap_sort_iterations
     global heap_sort_comparisons
     root = start
@@ -360,7 +412,8 @@ def sift_down(a, start, end):
             root = swap
             global heap_sort_swaps
             heap_sort_swaps += 1
-            print("Iteration " + str(heap_sort_iterations) + ": " + str(a))
+            if debug:
+                print("Iteration " + str(heap_sort_iterations) + ": " + str(a))
 
 
 def analize_heap_sort(n, comparisons, swaps, exec_time):
@@ -380,19 +433,19 @@ def recolect_bubble_data(comparisions, swaps):
 
 def createTable():
     print(dash_divb)
-    print(("|\tORDENAMIENTO\t\t|\tCOMPARACIONES\t|\tINTERCABIOS/DESPLAZAMIENTOS\t\t|\tTIEMPO\t|"))
+    print(("|\tORDENAMIENTO\t\t|\tCOMPARACIONES\t|\tINTERCABIOS/DESPLAZAMIENTOS\t\t|\tTIEMPO\t"))
     print(dash_divb)
-    print("|\tSELECTIONSORT\t\t|")
+    print("|\tSELECTIONSORT\t\t|\t\t" + str(selection_sort_comparisons) + "\t\t|\t\t\t\t" + str(selection_sort_swaps) + "\t\t\t\t\t|\t" + str(selection_sort_time) + "ms")
     print(dash_divb)
-    print("|\tINSERTIONSORT\t\t|")
+    print("|\tINSERTIONSORT\t\t|\t\t" + str(insertion_sort_comparisons) + "\t\t|\t\t\t\t" + str(insertion_sort_swaps) + "\t\t\t\t|\t" + str(insertion_sort_time) + "ms")
     print(dash_divb)
-    print("|\tBUBBLESORT\t\t\t|")
+    print("|\tBUBBLESORT\t\t\t|\t\t" + str(bubble_sort_comparisons) + "\t\t|\t\t\t\t" + str(bubble_sort_swaps) + "\t\t\t\t|\t" + str(bubble_sort_time) + "ms")
     print(dash_divb)
-    print("|\tMERGESORT\t\t\t|")
+    print("|\tMERGESORT\t\t\t|\t\t" + str(merge_sort_comparisons) + "\t\t\t|\t\t\t\t" + str(merge_sort_swaps) + "\t\t\t\t\t|\t" + str(merge_sort_time) + "ms")
     print(dash_divb)
-    print("|\tQUICKSORT\t\t\t|")
+    print("|\tQUICKSORT\t\t\t|\t\t" + str(quick_sort_comparisons) + "\t\t\t|\t\t\t\t" + str(quick_sort_swaps) + "\t\t\t\t\t|\t" + str(quick_sort_time) + "ms")
     print(dash_divb)
-    print("|\tHEAPSORT\t\t\t|")
+    print("|\tHEAPSORT\t\t\t|\t\t" + str(heap_sort_comparisons) + "\t\t\t|\t\t\t\t" + str(heap_sort_swaps) + "\t\t\t\t\t|\t" + str(heap_sort_time) + "ms")
     print(dash_divb)
 
 
@@ -445,22 +498,30 @@ def userInput():
     init_heap_sort(numbers, True)
 
 
-
-def fileCreating(numberFile):
-    print("Ingrese cuantos numeros aleatorios desea obtener: ")
-    numbers = int(input())
-    randomNumbers = [random.randint(0, 1000) for _ in range(numbers)]
-    with open(numberFile, 'w') as numbers:
+def file_creating(random_numbers):
+    file = 'numbers.txt'
+    with open(file, 'w') as numbers:
         numbers.write("[")
-        for i in range(len(randomNumbers)):
-            numbers.write(str(randomNumbers[i]))
-            if i != len(randomNumbers) - 1:
+        for i in range(len(random_numbers)):
+            numbers.write(str(random_numbers[i]))
+            if i != len(random_numbers) - 1:
                 numbers.write(",")
         numbers.write("]")
 
 
 def gen_input():
-    fileCreating('numbers.txt')
+    numbers = int(input("Ingrese cuantos numeros aleatorios desea obtener: "))
+    random_numbers = [random.randint(0, 1000) for _ in range(numbers)]
+    file_creating(random_numbers)
+    print("Arreglo: " + str(random_numbers))
+
+    selection_sort(random_numbers, False)
+    insertion_sort(random_numbers, False)
+    bubble_sort(random_numbers, False)
+    init_merge_sort(random_numbers, False)
+    init_quick_sort(random_numbers, False)
+    init_heap_sort(random_numbers, False)
+
     createTable()
 
 
