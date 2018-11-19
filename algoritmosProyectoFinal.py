@@ -1,5 +1,4 @@
 import math
-import os
 import random
 import time
 
@@ -8,7 +7,6 @@ dash_divb = ("-" * 90)
 
 
 def selection_sort(unsorted_array, debug):
-    initial_time = time.time()
     array_copy = unsorted_array.copy()
     print("             " + str(array_copy))
 
@@ -16,7 +14,7 @@ def selection_sort(unsorted_array, debug):
     iterations = 0
     swaps = 0
     comparisons = 0
-
+    initial_time = time.time()
     for i in range(n - 1):
         smallest = i
         for j in range(i + 1, n):
@@ -31,20 +29,22 @@ def selection_sort(unsorted_array, debug):
             array_copy[i], array_copy[smallest] = array_copy[smallest], array_copy[i]
             swaps += 1
     final_time = time.time()
-    total = final_time - initial_time
     if debug:
-        analize_selection_sort(n, comparisons, swaps)
+        analize_selection_sort(n, comparisons, swaps, final_time - initial_time)
     return array_copy
 
 
-def analize_selection_sort(n, comparisons, shifts):
-    comparisonsO = "n^2 = " + str(n ** 2)
-    shiftsO = "n^2 = "
-    comparisonsC = "((n-1)n)/2 = " + str((n - 1) * n / 2)
-    shiftsC = "((n-1)n)/2 = [0," + str((n - 1) * n / 2) + "]"
-    comparisonsR = str(comparisons)
-    shiftsR = str(shifts)
-    analize_algorithm(comparisonsO, shiftsO, comparisonsC, shiftsC, comparisonsR, shiftsR)
+def analize_selection_sort(n, comparisons, shifts, exec_time):
+    o_notation = n ** 2
+    complexity = int((n - 1) * n / 2)
+
+    comparisons_o = "n^2 = " + str(o_notation)
+    swap_o = "n = " + str(n)
+    comparisons_c = "((n-1)n)/2 = " + str(complexity)
+    shifts_c = "n = [0," + str(complexity) + "]"
+    comparisons_r = str(comparisons)
+    shifts_r = str(shifts)
+    analize_algorithm(comparisons_o, swap_o, comparisons_c, shifts_c, comparisons_r, shifts_r, exec_time)
 
 
 def insertion_sort(unsorted_array, debug):
@@ -55,31 +55,35 @@ def insertion_sort(unsorted_array, debug):
     iterations = 0
     swaps = 0
     comparisons = 0
+    initial_time = time.time()
 
-    for i in range(n):
-        j = i
-        isBigger = array_copy[j] < array_copy[j - 1]
-        comparisons += 1
-        while j > 0 and isBigger:
-            array_copy[j], array_copy[j - 1] = array_copy[j - 1], array_copy[j]
-            swaps += 1
+    for i in range(1, n):
+        for j in reversed(range(1, i + 1)):
             iterations += 1
+            is_bigger = array_copy[j - 1] > array_copy[j]
+            comparisons += 1
+            if is_bigger:
+                array_copy[j], array_copy[j - 1] = array_copy[j - 1], array_copy[j]
+                swaps += 1
             print("Iteration " + str(iterations) + ": " + str(array_copy))
-            j -= 1
 
+    final_time = time.time()
     if debug:
-        analize_insertion_sort(n, comparisons, swaps)
+        analize_insertion_sort(n, comparisons, swaps, final_time - initial_time)
     return array_copy
 
 
-def analize_insertion_sort(n, comparisons, swaps):
-    comparisonsO = "n^2 = " + str(n ** 2)
-    shiftsO = "n^2 = "
-    comparisonsC = "((n-1)n)/2 = " + str((n - 1) * n / 2)
-    shiftsC = "((n-1)n)/2 = [0," + str((n - 1) * n / 2) + "]"
-    comparisonsR = str(comparisons)
-    shiftsR = str(swaps)
-    analize_algorithm(comparisonsO, shiftsO, comparisonsC, shiftsC, comparisonsR, shiftsR)
+def analize_insertion_sort(n, comparisons, swaps, exec_time):
+    o_notation = n ** 2
+    complexity = int((n - 1) * n / 2)
+
+    comparisons_o = "n^2 = " + str(o_notation)
+    swap_o = "n^2 = " + str(o_notation)
+    comparisons_c = "((n-1)n)/2 = " + str(complexity)
+    shifts_c = "((n-1)n)/2 = [0," + str(complexity) + "]"
+    comparisons_r = str(comparisons)
+    shifts_r = str(swaps)
+    analize_algorithm(comparisons_o, swap_o, comparisons_c, shifts_c, comparisons_r, shifts_r, exec_time)
 
 
 def bubble_sort(unsorted_array, debug):
@@ -90,7 +94,7 @@ def bubble_sort(unsorted_array, debug):
     iterations = 0
     swaps = 0
     comparisons = 0
-
+    initial_time = time.time()
     for i in range(n - 1):
         for j in range(n - 1 - i):
             is_bigger = array_copy[j + 1] < array_copy[j]
@@ -100,22 +104,23 @@ def bubble_sort(unsorted_array, debug):
                 swaps += 1
             iterations += 1
             print("Iteration " + str(iterations) + ": " + str(array_copy))
-
+    final_time = time.time()
     if debug:
-        analize_bubble_sort(n, comparisons, swaps)
-    # else:
-    #     recolect_bubble_data(comparisons,swaps)
+        analize_bubble_sort(n, comparisons, swaps, final_time - initial_time)
     return array_copy
 
 
-def analize_bubble_sort(n, comparisons, swaps):
-    comparisonsO = "n^2 = " + str(n ** 2)
-    shiftsO = "n^2 = "
-    comparisonsC = "((n-1)n)/2 = " + str((n - 1) * n / 2)
-    shiftsC = "((n-1)n)/2 = [0," + str((n - 1) * n / 2) + "]"
-    comparisonsR = str(comparisons)
-    shiftsR = str(swaps)
-    analize_algorithm(comparisonsO, shiftsO, comparisonsC, shiftsC, comparisonsR, shiftsR)
+def analize_bubble_sort(n, comparisons, swaps, exec_time):
+    o_notation = n ** 2
+    complexity = int((n - 1) * n / 2)
+
+    comparisons_o = "n^2 = " + str(o_notation)
+    swap_o = "n^2 = " + str(o_notation)
+    comparisons_c = "((n-1)n)/2 = " + str(complexity)
+    shifts_c = "((n-1)n)/2 = [0," + str(complexity) + "]"
+    comparisons_r = str(comparisons)
+    shifts_r = str(swaps)
+    analize_algorithm(comparisons_o, swap_o, comparisons_c, shifts_c, comparisons_r, shifts_r, exec_time)
 
 
 merge_sort_iterations = 0
@@ -134,9 +139,11 @@ def init_merge_sort(unsorted_array, debug):
     merge_sort_comparisons = 0
     global merge_sort_swaps
     merge_sort_swaps = 0
+    initial_time = time.time()
     merge_sort(array_copy)
+    final_time = time.time()
     if debug:
-        analize_merge_sort(n, merge_sort_comparisons, merge_sort_swaps)
+        analize_merge_sort(n, merge_sort_comparisons, merge_sort_swaps, final_time - initial_time)
     return array_copy
 
 
@@ -160,43 +167,47 @@ def merge_sort(unsorted_array):
             right.append(unsorted_array[i])
 
     print("Divide:\t" + str(unsorted_array) + " -> " + str(left) + " " + str(right))
-    merge_sort(left)
-    merge_sort(right)
+    left = merge_sort(left)
+    right = merge_sort(right)
 
     return merge(left, right)
 
 
 def merge(left, right):
     result = []
+    message = "Merge: " + str(left) + " " + str(right) + " -> "
 
     while len(left) > 0 and len(right) > 0:
-        is_smaller = left[0] < right[0]
+        is_smaller = left[0] <= right[0]
         global merge_sort_comparisons
         merge_sort_comparisons += 1
         if is_smaller:
-            result.append(left.pop())
+            result.append(left.pop(0))
         else:
             global merge_sort_swaps
             merge_sort_swaps += 1
-            result.append(right.pop())
+            result.append(right.pop(0))
 
     while len(left) > 0:
         result.append(left.pop())
     while len(right) > 0:
         result.append(right.pop())
 
-    print("Merge: " + str(result))
+    print(message + str(result))
     return result
 
 
-def analize_merge_sort(n, comparisons, swaps):
-    comparisonsO = "n^2 = " + str(n ** 2)
-    shiftsO = "n^2 = "
-    comparisonsC = "((n-1)n)/2 = " + str((n - 1) * n / 2)
-    shiftsC = "((n-1)n)/2 = [0," + str((n - 1) * n / 2) + "]"
-    comparisonsR = str(comparisons)
-    shiftsR = str(swaps)
-    analize_algorithm(comparisonsO, shiftsO, comparisonsC, shiftsC, comparisonsR, shiftsR)
+def analize_merge_sort(n, comparisons, swaps, exec_time):
+    o_notation = round(n * math.log2(n), 2)
+    complexity = round(n * math.log2(n), 2)
+
+    comparisons_o = "nlog(n) = " + str(o_notation)
+    swap_o = "nlog(n) = " + str(o_notation)
+    comparisons_c = "nlog(n) = " + str(complexity)
+    shifts_c = "nlog(n) = [0," + str(complexity) + "]"
+    comparisons_r = str(comparisons)
+    shifts_r = str(swaps)
+    analize_algorithm(comparisons_o, swap_o, comparisons_c, shifts_c, comparisons_r, shifts_r, exec_time)
 
 
 quick_sort_iterations = 0
@@ -215,9 +226,11 @@ def init_quick_sort(unsorted_array, debug):
     quick_sort_comparisons = 0
     global quick_sort_swaps
     quick_sort_swaps = 0
+    initial_time = time.time()
     quick_sort(array_copy, 0, n - 1)
+    final_time = time.time()
     if debug:
-        analize_quick_sort(n, quick_sort_comparisons, quick_sort_swaps)
+        analize_quick_sort(n, quick_sort_comparisons, quick_sort_swaps, final_time - initial_time)
     return array_copy
 
 
@@ -253,14 +266,17 @@ def partition(array, lo, hi):
     return i
 
 
-def analize_quick_sort(n, comparisons, swaps):
-    comparisonsO = "n^2 = " + str(n ** 2)
-    shiftsO = "n^2 = "
-    comparisonsC = "((n-1)n)/2 = " + str((n - 1) * n / 2)
-    shiftsC = "((n-1)n)/2 = [0," + str((n - 1) * n / 2) + "]"
-    comparisonsR = str(comparisons)
-    shiftsR = str(swaps)
-    analize_algorithm(comparisonsO, shiftsO, comparisonsC, shiftsC, comparisonsR, shiftsR)
+def analize_quick_sort(n, comparisons, swaps, exec_time):
+    o_notation = round(n * math.log2(n), 2)
+    complexity = round(n * math.log2(n), 2)
+
+    comparisons_o = "nlog(n) = " + str(o_notation)
+    swap_o = "nlog(n) = " + str(o_notation)
+    comparisons_c = "nlog(n) = " + str(complexity)
+    shifts_c = "nlog(n) = [0," + str(complexity) + "]"
+    comparisons_r = str(comparisons)
+    shifts_r = str(swaps)
+    analize_algorithm(comparisons_o, swap_o, comparisons_c, shifts_c, comparisons_r, shifts_r, exec_time)
 
 
 heap_sort_iterations = 0
@@ -291,9 +307,11 @@ def init_heap_sort(unsorted_array, debug):
     heap_sort_comparisons = 0
     global heap_sort_swaps
     heap_sort_swaps = 0
+    initial_time = time.time()
     heap_sort(array_copy)
+    final_time = time.time()
     if debug:
-        analize_heap_sort(n, heap_sort_comparisons, heap_sort_swaps)
+        analize_heap_sort(n, heap_sort_comparisons, heap_sort_swaps, final_time - initial_time)
     return array_copy
 
 
@@ -345,14 +363,17 @@ def sift_down(a, start, end):
             print("Iteration " + str(heap_sort_iterations) + ": " + str(a))
 
 
-def analize_heap_sort(n, comparisons, swaps):
-    comparisonsO = "n^2 = " + str(n ** 2)
-    shiftsO = "n^2 = "
-    comparisonsC = "((n-1)n)/2 = " + str((n - 1) * n / 2)
-    shiftsC = "((n-1)n)/2 = [0," + str((n - 1) * n / 2) + "]"
-    comparisonsR = str(comparisons)
-    shiftsR = str(swaps)
-    analize_algorithm(comparisonsO, shiftsO, comparisonsC, shiftsC, comparisonsR, shiftsR)
+def analize_heap_sort(n, comparisons, swaps, exec_time):
+    o_notation = round(n * math.log2(n), 2)
+    complexity = round(n * math.log2(n), 2)
+
+    comparisons_o = "nlog(n) = " + str(o_notation)
+    swap_o = "nlog(n) = " + str(o_notation)
+    comparisons_c = "nlog(n) = " + str(complexity)
+    shifts_c = "nlog(n) = [0," + str(complexity) + "]"
+    comparisons_r = str(comparisons)
+    shifts_r = str(swaps)
+    analize_algorithm(comparisons_o, swap_o, comparisons_c, shifts_c, comparisons_r, shifts_r, exec_time)
 
 def recolect_bubble_data(comparisions, swaps):
     print("|\tBUBBLESORT\t\t\t|\t" + comparisions + "\t|" + swaps + "\t\t\t|")
@@ -385,7 +406,7 @@ def menu():
     return option
 
 
-def analize_algorithm(comparisonsO, shiftsO, comparisonsC, shiftsC, comparisonsR, shiftsR):
+def analize_algorithm(comparisonsO, shiftsO, comparisonsC, shiftsC, comparisonsR, shiftsR, exec_time):
     print(dash_div)
     print("\t\t\t|\tCOMPARACIONES\t\t|\t\tINTERCAMBIOS\t\t|")
     print("Notación O\t|\t\t" + comparisonsO + "\t\t|\t\t\t" + shiftsO + "\t\t\t|")
@@ -393,7 +414,7 @@ def analize_algorithm(comparisonsO, shiftsO, comparisonsC, shiftsC, comparisonsR
     print(dash_div)
     print("Realizadas\t|\t\t" + comparisonsR + "\t\t\t\t|\t\t\t" + shiftsR + "\t\t\t|")
     print(dash_div)
-    print("Tiempo de ejecución: ")
+    print("Tiempo de ejecución: " + str(exec_time) + "ms")
 
 
 def userInput():
@@ -438,21 +459,20 @@ def fileCreating(numberFile):
         numbers.write("]")
 
 
-def genInput():
+def gen_input():
     fileCreating('numbers.txt')
     createTable()
 
-def main():
-    os.system('cls')
 
+def main():
     option = menu()
 
     if option == "a":
         userInput()
     elif option == "b":
-        genInput()
+        gen_input()
     # a = [5,7,2,3,9,1]
     # print(selectionSort(a, False))
+
+
 main()
-
-
