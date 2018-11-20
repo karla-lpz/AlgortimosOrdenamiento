@@ -179,7 +179,7 @@ def init_merge_sort(unsorted_array, debug):
     global merge_sort_swaps
     merge_sort_swaps = 0
     initial_time = time.time()
-    merge_sort(array_copy, debug)
+    array_copy = merge_sort(array_copy, debug)
     global merge_sort_time
     merge_sort_time = time.time() - initial_time
     if debug:
@@ -498,29 +498,38 @@ def userInput():
     init_heap_sort(numbers, True)
 
 
-def file_creating(random_numbers):
+def file_creating(random_numbers, selection, insertion, bubble, amerge, quick, heap):
     file = 'numbers.txt'
     with open(file, 'w') as numbers:
-        numbers.write("[")
-        for i in range(len(random_numbers)):
-            numbers.write(str(random_numbers[i]))
-            if i != len(random_numbers) - 1:
-                numbers.write(",")
-        numbers.write("]")
+        numbers.write("Random Array:\n")
+        numbers.write(str(random_numbers) + "\n")
+        numbers.write("Selection Sort:\n")
+        numbers.write(str(selection) + "\n")
+        numbers.write("Insertion Sort:\n")
+        numbers.write(str(insertion) + "\n")
+        numbers.write("Bubble Sort:\n")
+        numbers.write(str(bubble) + "\n")
+        numbers.write("Merge Sort:\n")
+        numbers.write(str(amerge) + "\n")
+        numbers.write("Quick Sort:\n")
+        numbers.write(str(quick) + "\n")
+        numbers.write("Heap Sort:\n")
+        numbers.write(str(heap) + "\n")
 
 
 def gen_input():
     numbers = int(input("Ingrese cuantos numeros aleatorios desea obtener: "))
     random_numbers = [random.randint(0, 1000) for _ in range(numbers)]
-    file_creating(random_numbers)
     print("Arreglo: " + str(random_numbers))
 
-    selection_sort(random_numbers, False)
-    insertion_sort(random_numbers, False)
-    bubble_sort(random_numbers, False)
-    init_merge_sort(random_numbers, False)
-    init_quick_sort(random_numbers, False)
-    init_heap_sort(random_numbers, False)
+    file_creating(
+        random_numbers,
+        selection_sort(random_numbers, False),
+        insertion_sort(random_numbers, False),
+        bubble_sort(random_numbers, False),
+        init_merge_sort(random_numbers, False),
+        init_quick_sort(random_numbers, False),
+        init_heap_sort(random_numbers, False))
 
     createTable()
 
@@ -532,8 +541,6 @@ def main():
         userInput()
     elif option == "b":
         gen_input()
-    # a = [5,7,2,3,9,1]
-    # print(selectionSort(a, False))
 
 
 main()
